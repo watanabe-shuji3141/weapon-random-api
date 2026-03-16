@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>武器ルーレット</title>
+<style>
+body{
+  font-family: monospace;
+  background:#111;
+  color:#00ff88;
+  padding:40px;
+}
+.box{
+  background:#000;
+  border:2px solid #00ff88;
+  padding:20px;
+  white-space:pre;
+}
+</style>
+</head>
+<body>
+
+<h1>スプラ武器ルーレット</h1>
+
+<div class="box" id="result">
+読み込み中...
+</div>
+
+<script>
+
+async function load(){
+
+const res = await fetch("/api/random")
+const text = await res.text()
+
+document.getElementById("result").innerText = text
+
+}
+
+load()
+
+</script>
+
+</body>
+</html>

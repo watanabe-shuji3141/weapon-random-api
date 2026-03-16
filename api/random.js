@@ -10,7 +10,7 @@
 
 //  // デフォルト4人
 //  if(!names){
-//   names = ["Name1","Name2","Name3","Name4"]
+//   names = ["Player1","Player2","Player3","Player4"]
 //  }
 
 //  if(typeof names === "string"){
@@ -46,11 +46,11 @@ export default function handler(req, res) {
 
   const names = req.query.names
     ? req.query.names.split(",")
-    : Array.from({ length: count }, (_, i) => `Name${i+1}`);
+    : Array.from({ length: count }, (_, i) => `Player${i+1}`);
 
   const results = names.map(name => {
     const weapon = weapons[Math.floor(Math.random() * weapons.length)];
-    return `${name}（${weapon.name}）`;
+    return `${name}（${weapon.name.ja_JP}）`;
   });
 
   const text = `

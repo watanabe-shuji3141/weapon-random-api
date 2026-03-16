@@ -1,11 +1,39 @@
+import weapons from "../data/weapons.json"
+
 export default async function handler(req, res) {
 
- const response = await fetch(https://stat.ink/api/v3/weapon)
- const weapons = await response.json()
+ function randomWeapon(){
+  return weapons[Math.floor(Math.random()*weapons.length)]
+ }
 
- const random =
-  weapons[Math.floor(Math.random()*weapons.length)]
+ let names = req.query.names
 
- res.status(200).json(random)
+ // デフォルト4人
+ if(!names){
+  names = ["Name1","Name2","Name3","Name4"]
+ }
+
+ if(typeof names === "string"){
+  names = names.split(",")
+ }
+
+ names = names.slice(0,8)
+
+ let result = `===========================
+◇武器ルーレット結果
+===========================
+
+`
+
+ for(let name of names){
+
+  const weapon = randomWeapon()
+
+  result += `${name}（${weapon.name}）\n`
+
+ }
+
+ res.setHeader("Content-Type","text/plain; charset=utf-8")
+ res.status(200).send(result)
 
 }

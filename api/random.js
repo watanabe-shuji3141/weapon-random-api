@@ -29,7 +29,8 @@ export default async function handler(req, res) {
 
   const weapon = randomWeapon()
 
-  result += `${name}（${weapon.name}）\n`
+  // result += `${name}（${weapon.name}）\n`
+  result += `${name}（${weapon.name.ja_JP}）\n`
 
  }
 

@@ -1,40 +1,110 @@
-import weapons from "../data/weapons.json"
+// import weapons from "../data/weapons.json"
 
-export default async function handler(req, res) {
+// export default async function handler(req, res) {
 
- function randomWeapon(){
-  return weapons[Math.floor(Math.random()*weapons.length)]
- }
+//  function randomWeapon(){
+//   return weapons[Math.floor(Math.random()*weapons.length)]
+//  }
 
- let names = req.query.names
+//  let names = req.query.names
 
- // デフォルト4人
- if(!names){
-  names = ["Name1","Name2","Name3","Name4"]
- }
+//  // デフォルト4人
+//  if(!names){
+//   names = ["Name1","Name2","Name3","Name4"]
+//  }
 
- if(typeof names === "string"){
-  names = names.split(",")
- }
+//  if(typeof names === "string"){
+//   names = names.split(",")
+//  }
 
- names = names.slice(0,8)
+//  names = names.slice(0,8)
 
- let result = `===========================
+//  let result = `===========================
+// ◇武器ルーレット結果
+// ===========================
+
+// `
+
+//  for(let name of names){
+
+//   const weapon = randomWeapon()
+
+//   // result += `${name}（${weapon.name}）\n`
+//   result += `${name}（${weapon.name.ja_JP}）\n`
+
+//  }
+
+//  res.setHeader("Content-Type","text/plain; charset=utf-8")
+//  res.status(200).send(result)
+
+// }
+import weapons from "../data/weapons.json";
+
+export default function handler(req, res) {
+
+  const count = parseInt(req.query.count) || 4;
+
+  const names = req.query.names
+    ? req.query.names.split(",")
+    : Array.from({ length: count }, (_, i) => `Name${i+1}`);
+
+  const results = names.map(name => {
+    const weapon = weapons[Math.floor(Math.random() * weapons.length)];
+    return `${name}（${weapon.name}）`;
+  });
+
+  const text = `
+===========================
 ◇武器ルーレット結果
 ===========================
 
-`
+${results.join("\n")}
+`;
 
- for(let name of names){
+  // Discord OGP用 description
+  const ogDescription = results.join(" / ");
 
-  const weapon = randomWeapon()
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
 
-  // result += `${name}（${weapon.name}）\n`
-  result += `${name}（${weapon.name.ja_JP}）\n`
+<meta property="og:title" content="スプラ武器ルーレット結果">
+<meta property="og:description" content="${ogDescription}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="">
+<meta property="og:image" content="https://static.wikia.nocookie.net/splatoon/images/6/6c/Splatoon_3_logo.png">
 
- }
+<title>武器ルーレット結果</title>
 
- res.setHeader("Content-Type","text/plain; charset=utf-8")
- res.status(200).send(result)
+<style>
+body{
+background:#111;
+color:#00ff88;
+font-family:monospace;
+padding:40px;
+}
+.box{
+white-space:pre;
+border:2px solid #00ff88;
+padding:20px;
+}
+</style>
 
+</head>
+
+<body>
+
+<h1>武器ルーレット結果</h1>
+
+<div class="box">
+${text}
+</div>
+
+</body>
+</html>
+`;
+
+  res.setHeader("Content-Type", "text/html");
+  res.status(200).send(html);
 }

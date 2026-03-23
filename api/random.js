@@ -41,7 +41,7 @@
 import weapons from "../data/weapons.json";
 
 export default function handler(req, res) {
-  const fullUrl = `https://your-domain.com/api/roulette?t=${Date.now()}`;
+  const fullUrl = `https://weapon-random-api.vercel.app/api/random?t=${Date.now()}`;
   const count = parseInt(req.query.count) || 4;
 
   const names = req.query.names

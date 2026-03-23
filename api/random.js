@@ -41,7 +41,7 @@
 import weapons from "../data/weapons.json";
 
 export default function handler(req, res) {
-
+  const fullUrl = `https://your-domain.com/api/roulette?t=${Date.now()}`;
   const count = parseInt(req.query.count) || 4;
 
   const names = req.query.names
@@ -72,7 +72,7 @@ ${results.join("\n")}
 <meta property="og:title" content="スプラ武器ルーレット結果">
 <meta property="og:description" content="${ogDescription}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="">
+<meta property="og:url" content="${fullUrl}">
 <meta property="og:image" content="https://static.wikia.nocookie.net/splatoon/images/6/6c/Splatoon_3_logo.png">
 
 <title>武器ルーレット結果</title>
@@ -104,7 +104,10 @@ ${text}
 </body>
 </html>
 `;
-
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  res.setHeader("Surrogate-Control", "no-store");
   res.setHeader("Content-Type", "text/html");
   res.status(200).send(html);
 }
